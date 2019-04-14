@@ -9,8 +9,11 @@ created by [/u/wilhueb](https://reddit.com/u/wilhueb)
 - create secrets.py file and set the following variables:
 
 `GM_ACCESS_TOKEN = ''`
+
 `GM_BOT_ID = ''`
+
 `REDDIT_CLIENT_ID = ''`
+
 `REDDIT_CLIENT_SECRET = ''`
 
 - `python3 bot.py`
