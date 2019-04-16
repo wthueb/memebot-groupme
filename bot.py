@@ -78,9 +78,15 @@ def send_message(post, img) -> None:
 def run() -> None:
     logging.info('running...')
     
-    post, img = get_meme()
+    try:
+        post, img = get_meme()
 
-    send_message(post, img)
+        send_message(post, img)
+    except Exception as e:
+        logging.warning(f'got exception: {e}')
+        logging.warning('trying again')
+
+        run()
 
 def main() -> None:
     schedule.every().day.at('12:00').do(run)
