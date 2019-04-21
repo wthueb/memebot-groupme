@@ -1,5 +1,6 @@
 import json
 import logging
+from os import environ
 from random import choice
 from time import sleep
 
@@ -28,20 +29,30 @@ def get_meme() -> (praw.models.Submission, bytes):
     for s in SUBREDDITS:
         logging.info(f'gathering top 3 posts from /r/{s}...')
 
-        sub = reddit.subreddit(s)
+        try:
+            sub = reddit.subreddit(s)
 
-        top3 = sub.top('day', limit=3)
+            top3 = sub.top('day', limit=3)
 
-        for post in top3:
-            if not post.is_self and not post.is_video and not post.stickied:
-                potentials.append(post)
+            for post in top3:
+                if not post.is_self and not post.is_video and not post.stickied:
+                    potentials.append(post)
+        except Exception as e:
+            logging.error(f'got exception: {e}\nwhile trying to access /r/{s}. may be private/banned. continuing')
+
+            continue
 
     img = None
 
     while not img:
         post = choice(potentials)
 
-        r = requests.get(post.url, allow_redirects=True)
+        try:
+            r = requests.get(post.url, allow_redirects=True)
+        except Exception as e:
+            logging.error(f'got exception: {e}\nwhile trying to access {post.shortlink}, skipping')
+
+            continue
 
         if r.headers['Content-Type'] not in ('image/gif', 'image/jpeg', 'image/png'):
             continue
@@ -56,7 +67,12 @@ def get_meme() -> (praw.models.Submission, bytes):
 def send_message(post, img) -> None:
     headers = {'x-access-token': GM_ACCESS_TOKEN, 'content-type': 'image/jpeg'}
 
-    r = requests.post('https://image.groupme.com/pictures', headers=headers, data=img)
+    try:
+        r = requests.post('https://image.groupme.com/pictures', headers=headers, data=img)
+    except Exception as e:
+        logging.error(f'got exception: {e}\nwhile trying to upload image to groupme, skipping')
+
+        return
 
     url = r.json()['payload']['url']
 
@@ -78,17 +94,16 @@ def send_message(post, img) -> None:
 def run() -> None:
     logging.info('running...')
     
-    try:
-        post, img = get_meme()
+    post, img = get_meme()
 
-        send_message(post, img)
-    except Exception as e:
-        logging.warning(f'got exception: {e}')
-        logging.warning('trying again')
+    send_message(post, img)
+
+def main() -> None:
+    if 'DEBUG' in environ and environ['DEBUG']:
+        logging.info('DEBUG environment variable set to 1, running')
 
         run()
 
-def main() -> None:
     schedule.every().day.at('12:00').do(run)
     
     logging.info('initialized, running loop...')
