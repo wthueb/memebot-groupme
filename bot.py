@@ -13,8 +13,7 @@ from secrets import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-SUBREDDITS = ('me_irl', 'dankmemes', 'cursedimages', 'hmmm', 'okbuddyretard',
-              'RealBeesFakeTopHats', 'soulcrushingjuice', 'waterniggas', 'WinStupidPrizes')
+SUBREDDITS = ('me_irl', 'dankmemes', 'hmmm', 'okbuddyretard', 'soulcrushingjuice')
 
 
 def get_meme() -> (praw.models.Submission, bytes):
