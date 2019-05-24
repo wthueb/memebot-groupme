@@ -13,8 +13,6 @@ from secrets import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-SUBREDDITS = ('me_irl', 'dankmemes', 'hmmm', 'okbuddyretard', 'soulcrushingjuice')
-
 
 def get_meme() -> (praw.models.Submission, bytes):
     logging.info('getting meme image...')
@@ -23,9 +21,11 @@ def get_meme() -> (praw.models.Submission, bytes):
                          client_secret=REDDIT_CLIENT_SECRET,
                          user_agent='memebot-groupme by /u/wilhueb')
 
+    subreddits = [s.strip() for s in open('subs.txt', 'r').readlines()]
+
     potentials = []
 
-    for s in SUBREDDITS:
+    for s in subreddits:
         logging.info(f'gathering top 3 posts from /r/{s}...')
 
         try:
