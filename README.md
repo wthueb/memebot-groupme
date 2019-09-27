@@ -16,4 +16,8 @@ created by [/u/wilhueb](https://reddit.com/u/wilhueb)
 
 `REDDIT_CLIENT_SECRET = ''`
 
+- create subs.txt with a subreddit name on each line (no /r/)
+
+- set global variables in bot.py
+
 - `python3 bot.py`
