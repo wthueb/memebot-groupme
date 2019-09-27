@@ -87,7 +87,6 @@ def send_message(memes) -> None:
 
             return
 
-        print(r.json())
         urls.append(r.json()['payload']['url'])
 
     headers = {'content-type': 'application/json'}
