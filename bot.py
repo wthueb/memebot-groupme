@@ -66,7 +66,7 @@ def get_memes() -> list:
         if r.headers['Content-Type'] not in ('image/gif', 'image/jpeg', 'image/png'):
             continue
 
-        logging.info(f'got meme: {post.shortlink}')
+        logging.info(f'got meme: {post.shortlink} from /r/{post.subreddit}')
 
         memes.append(r.content)
 
