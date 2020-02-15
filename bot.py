@@ -82,7 +82,7 @@ def get_memes() -> list:
                     count += 1
 
                     if count >= NUM_POSTS_PER_SUBREDDIT:
-                        continue
+                        break
         except Exception as e:
             logger.error((f'got exception: {e}\n'
                            f'while trying to access /r/{s}. may be private/banned. continuing'))
