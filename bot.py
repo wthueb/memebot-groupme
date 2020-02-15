@@ -10,7 +10,7 @@ import praw
 import requests
 import schedule
 
-from secrets import *
+import config
 
 logging.config.dictConfig({
     'version': 1,
@@ -52,15 +52,15 @@ logging.config.dictConfig({
 
 logger = logging.getLogger('memebot')
 
-NUM_POSTS_PER_SUBREDDIT = 1
+NUM_POSTS_PER_SUBREDDIT = 3
 NUM_MEMES = 1
 
 
 def get_memes() -> list:
     logger.info('getting meme images...')
 
-    reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
-                         client_secret=REDDIT_CLIENT_SECRET,
+    reddit = praw.Reddit(client_id=config.REDDIT_CLIENT_ID,
+                         client_secret=config.REDDIT_CLIENT_SECRET,
                          user_agent='memebot-groupme by /u/wilhueb')
 
     subreddits = [s.strip() for s in open('subs.txt', 'r').readlines()]
@@ -113,7 +113,7 @@ def get_memes() -> list:
 
 
 def send_message(memes) -> None:
-    headers = {'x-access-token': GM_ACCESS_TOKEN, 'content-type': 'image/jpeg'}
+    headers = {'x-access-token': config.GM_ACCESS_TOKEN, 'content-type': 'image/jpeg'}
 
     urls = []
 
@@ -129,7 +129,7 @@ def send_message(memes) -> None:
         urls.append(r.json()['payload']['url'])
 
     headers = {'content-type': 'application/json'}
-    payload = {'bot_id': GM_BOT_ID}
+    payload = {'bot_id': config.GM_BOT_ID}
 
     payload['text'] = 'meme of the day'
 

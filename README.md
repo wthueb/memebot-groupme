@@ -6,7 +6,7 @@ created by [/u/wilhueb](https://reddit.com/u/wilhueb)
 
 - use pip to install everything in requirements.txt (`pip3 install -r requirements.txt`)
 
-- create secrets.py file and set the following variables:
+- create config.py file and set the following variables:
 
 `GM_ACCESS_TOKEN = ''`
 
@@ -16,7 +16,10 @@ created by [/u/wilhueb](https://reddit.com/u/wilhueb)
 
 `REDDIT_CLIENT_SECRET = ''`
 
-- create subs.txt with a subreddit name on each line (no /r/)
+- create subs.txt with a subreddit name on each line:
+
+`memes`
+`funny`
 
 - set global variables in bot.py
 
