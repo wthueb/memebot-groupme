@@ -3,7 +3,6 @@ import logging
 import logging.config
 from os import environ
 from random import choice
-import sys
 from time import sleep
 
 import praw
@@ -22,7 +21,7 @@ logging.config.dictConfig({
         },
 
         'precise': {
-            'format': '%(asctime)s %(name)-10s %(levelname)-7s %(message)s'
+            'format': '%(asctime)s %(name)-25s %(levelname)-7s %(message)s'
         }
     },
 
@@ -37,7 +36,7 @@ logging.config.dictConfig({
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'log/memebot.log',
-            'maxBytes': 2*1024*1024, # 2 MiB
+            'maxBytes': 2*1024*1024,  # 2 MiB
             'backupCount': 10,
             'level': 'DEBUG',
             'formatter': 'precise'
@@ -85,7 +84,7 @@ def get_memes() -> list:
                         break
         except Exception as e:
             logger.error((f'got exception: {e}\n'
-                           f'while trying to access /r/{s}. may be private/banned. continuing'))
+                          f'while trying to access /r/{s}. may be private/banned. continuing'))
 
             continue
 
@@ -98,7 +97,7 @@ def get_memes() -> list:
             r = requests.get(post.url, allow_redirects=True)
         except Exception as e:
             logger.error((f'got exception: {e}\n'
-                           f'while trying to access {post.shortlink}, skipping'))
+                          f'while trying to access {post.shortlink}, skipping'))
 
             continue
 
@@ -122,7 +121,7 @@ def send_message(memes) -> None:
             r = requests.post('https://image.groupme.com/pictures', headers=headers, data=img)
         except Exception as e:
             logger.error((f'got exception: {e}\n'
-                           f'while trying to upload image to groupme, skipping'))
+                          f'while trying to upload image to groupme, skipping'))
 
             return
 
@@ -147,7 +146,7 @@ def send_message(memes) -> None:
 
 def run() -> None:
     logger.info('running...')
-    
+
     memes = get_memes()
 
     send_message(memes)
@@ -162,13 +161,14 @@ def main() -> None:
         exit()
 
     schedule.every().day.at('12:00').do(run)
-    
+
     logger.info('initialized, running loop...')
-    
+
     while True:
         schedule.run_pending()
 
         sleep(1)
+
 
 if __name__ == '__main__':
     main()
