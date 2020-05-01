@@ -51,7 +51,7 @@ logging.config.dictConfig({
 
 logger = logging.getLogger('memebot')
 
-NUM_POSTS_PER_SUBREDDIT = 3
+NUM_POSTS_PER_SUBREDDIT = 20
 NUM_MEMES = 1
 
 
@@ -74,7 +74,7 @@ def get_memes() -> list:
 
             count = 0
 
-            for post in sub.top('day', limit=20):
+            for post in sub.top('day', limit=50):
                 if not post.is_self and not post.is_video and not post.stickied:
                     potentials.append(post)
 
@@ -101,7 +101,7 @@ def get_memes() -> list:
 
             continue
 
-        if r.headers['Content-Type'] not in ('image/gif', 'image/jpeg', 'image/png'):
+        if r.headers['Content-Type'] not in ('image/jpeg', 'image/png'):
             continue
 
         logger.info(f'got meme: {post.shortlink} from /r/{post.subreddit}')
@@ -147,9 +147,15 @@ def send_message(memes) -> None:
 def run() -> None:
     logger.info('running...')
 
-    memes = get_memes()
+    try:
+        memes = get_memes()
 
-    send_message(memes)
+        send_message(memes)
+    except Exception as e:
+        logger.error(e)
+        logger.info('got an error, trying again')
+
+        run()
 
 
 def main() -> None:
