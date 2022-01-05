@@ -4,23 +4,17 @@ created by [/u/wilhueb](https://reddit.com/u/wilhueb)
 
 #### usage:
 
-- use pip to install everything in requirements.txt (`pip3 install -r requirements.txt`)
+- `pip install -r requirements.txt`
 
-- create config.py file and set the following variables:
+- create config.py file and set the following variables: `GM_ACCESS_TOKEN: str`, `GM_BOT_ID: str`, `REDDIT_CLIENT_ID: str`, `REDDIT_CLIENT_SECRET: str`
 
-`GM_ACCESS_TOKEN = ''`
+- create subs.txt with a subreddit name on each line, example:
 
-`GM_BOT_ID = ''`
-
-`REDDIT_CLIENT_ID = ''`
-
-`REDDIT_CLIENT_SECRET = ''`
-
-- create subs.txt with a subreddit name on each line:
-
-`memes`
-`funny`
+```
+memes
+funny
+```
 
 - set global variables in bot.py
 
-- `python3 bot.py`
+- `python bot.py`
